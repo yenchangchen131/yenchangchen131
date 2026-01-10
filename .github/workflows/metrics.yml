@@ -1,0 +1,36 @@
+name: Metrics
+on:
+  # 每天午夜自動更新
+  schedule: [{cron: "0 0 * * *"}]
+  # 允許手動觸發 (在 Actions 頁面)
+  workflow_dispatch:
+  # 當 push 到 master/main 分支時觸發
+  push: {branches: ["master", "main"]}
+
+jobs:
+  github-metrics:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: lowlighter/metrics@latest
+        with:
+          # 你的 GitHub Token
+          token: ${{ secrets.METRICS_TOKEN }}
+
+          # 基礎設定
+          user: yenchangchen131
+          template: classic
+          base: header, activity, community, repositories, metadata
+          config_timezone: Asia/Taipei
+
+          # 插件設定 (根據你貼出的 SVG 啟用對應功能)
+          plugin_lines: yes
+          plugin_languages: yes
+          plugin_languages_ignored: >-
+            html, css
+          plugin_languages_limit: 8
+          
+          # 顯示 Calendar (像你貼出的那個綠色格子圖)
+          plugin_isocalendar: yes
+          plugin_isocalendar_duration: half-year
